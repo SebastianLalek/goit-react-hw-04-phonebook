@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Notiflix from 'notiflix';
 
 import { nanoid } from 'nanoid';
@@ -16,6 +16,7 @@ function Phonebook() {
     { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
   ];
   const [contacts, setContacts] = useState(initContacts);
+  const [filter, setFilter] = useState('');
 
   const addNewContact = e => {
     e.preventDefault();
@@ -41,14 +42,28 @@ function Phonebook() {
     setContacts([...updatedContacts]);
   };
 
+  const preventSubmit = e => {
+    e.preventDefault();
+  };
+
+  const handleChange = e => {
+    setFilter(e.target.value);
+  };
+
+  const filteredContacts = () => {
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  };
+
   return (
     <div>
       <Section title="Phonebook">
         <Form onSubmit={addNewContact} />
       </Section>
       <Section title="Contacts">
-        <ContactList contacts={contacts} onClick={deleteContact}>
-          <Filter onChange={'handleChange'} onSubmit={'preventSubmit'} />
+        <ContactList contacts={filteredContacts()} onClick={deleteContact}>
+          <Filter onChange={handleChange} onSubmit={preventSubmit} />
         </ContactList>
       </Section>
     </div>
