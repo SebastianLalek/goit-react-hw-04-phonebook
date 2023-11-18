@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Notiflix from 'notiflix';
 
 import { nanoid } from 'nanoid';
@@ -28,6 +28,18 @@ function Phonebook() {
       name: newName,
       number: newNumber,
     };
+
+    if (
+      contacts.find(
+        contact => contact.name.toLowerCase() === newContact.name.toLowerCase()
+      )
+    ) {
+      return Notiflix.Report.failure(
+        'Error',
+        `${newContact.name} is already in contacts`,
+        'OK'
+      );
+    }
 
     setContacts(contacts => [...contacts, newContact]);
   };
