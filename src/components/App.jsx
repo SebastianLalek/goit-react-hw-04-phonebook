@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Notiflix from 'notiflix';
 
 import { nanoid } from 'nanoid';
@@ -9,13 +9,7 @@ import Section from './section/section';
 import Filter from './filter/filter';
 
 function Phonebook() {
-  const initContacts = [
-    { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-    { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-    { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-    { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-  ];
-  const [contacts, setContacts] = useState(initContacts);
+  const [contacts, setContacts] = useState([]);
   const [filter, setFilter] = useState('');
 
   const addNewContact = e => {
@@ -67,6 +61,23 @@ function Phonebook() {
       contact.name.toLowerCase().includes(filter.toLowerCase())
     );
   };
+
+  useEffect(() => {
+    const savedContacts = localStorage.getItem('contacts');
+    const parsedContats = JSON.parse(savedContacts);
+
+    if (parsedContats === null) {
+      return;
+    }
+
+    if (parsedContats.length > 0) {
+      setContacts(parsedContats);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts]);
 
   return (
     <div>
