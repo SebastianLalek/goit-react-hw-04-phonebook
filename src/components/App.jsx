@@ -30,13 +30,24 @@ function Phonebook() {
 
     setContacts(contacts => [...contacts, newContact]);
   };
+
+  const deleteContact = e => {
+    const contactId = e.target.id;
+
+    const updatedContacts = contacts.filter(
+      contact => contact.id !== contactId
+    );
+
+    setContacts([...updatedContacts]);
+  };
+
   return (
     <div>
       <Section title="Phonebook">
         <Form onSubmit={addNewContact} />
       </Section>
       <Section title="Contacts">
-        <ContactList contacts={contacts} onClick={'deleteContact'}>
+        <ContactList contacts={contacts} onClick={deleteContact}>
           <Filter onChange={'handleChange'} onSubmit={'preventSubmit'} />
         </ContactList>
       </Section>
